@@ -11,13 +11,76 @@ const SCREENSHOT_BASIC_TOKEN = GetConvar('SCREENSHOT_BASIC_TOKEN', 'none');
 const exp = global.exports;
 
 let inCameraMode = false;
+let scaleformCamera: number = null;
+let scaleformButton: number = null;
+let depthField = false;
+let drawGridLines = false;
+let filterIndex = 0;
+let filterNames: string[] = [
+  'No_Filter',
+  'phone_cam1',
+  'phone_cam2',
+  'phone_cam3',
+  'phone_cam4',
+  'phone_cam5',
+  'phone_cam6',
+  'phone_cam7',
+  'phone_cam8',
+  'phone_cam9',
+  'phone_cam10',
+  'phone_cam11',
+  'phone_cam12',
+];
+
+function InsertScaleformButton(i: number, controlIndex: number, scString: string) {
+  BeginScaleformMovieMethod(scaleformButton, 'SET_DATA_SLOT');
+  ScaleformMovieMethodAddParamInt(i);
+  ScaleformMovieMethodAddParamPlayerNameString(GetControlInstructionalButton(0, controlIndex, 1));
+  BeginTextCommandScaleformString(scString);
+  EndTextCommandScaleformString();
+  EndScaleformMovieMethod();
+}
+
+function DrawCameraInstructionalButtons(frontCam: boolean) {
+  BeginScaleformMovieMethod(scaleformButton, 'SET_CLEAR_SPACE');
+  ScaleformMovieMethodAddParamInt(200);
+  EndScaleformMovieMethod();
+
+  BeginScaleformMovieMethod(scaleformButton, 'SET_DATA_SLOT_EMPTY');
+  ScaleformMovieMethodAddParamInt(3);
+  EndScaleformMovieMethod();
+
+  InsertScaleformButton(0, 176, 'CELL_280');
+  InsertScaleformButton(1, 177, 'CELL_281');
+  InsertScaleformButton(2, 184, frontCam ? 'CELL_SP_2NP_XB' : 'CELL_SP_1NP_XB');
+  InsertScaleformButton(3, 183, 'CELL_GRID');
+  InsertScaleformButton(4, 1, 'CELL_285');
+  InsertScaleformButton(5, 173, 'CELL_FILTER');
+  InsertScaleformButton(6, 175, 'CELL_ACCYC');
+  InsertScaleformButton(7, 185, 'CELL_DEPTH');
+
+  BeginScaleformMovieMethod(scaleformButton, 'DRAW_INSTRUCTIONAL_BUTTONS');
+  ScaleformMovieMethodAddParamInt(0);
+  EndScaleformMovieMethod();
+
+  DrawScaleformMovieFullscreen(scaleformButton, 255, 255, 255, 255, 0);
+}
 
 function closePhoneTemp() {
   SetNuiFocus(false, false);
   sendMessage('PHONE', PhoneEvents.SET_VISIBILITY, false);
+
+  SetScaleformMovieAsNoLongerNeeded(scaleformCamera);
+  SetScaleformMovieAsNoLongerNeeded(scaleformButton);
 }
 
-function openPhoneTemp() {
+async function openPhoneTemp() {
+  scaleformCamera = RequestScaleformMovie('camera_gallery');
+  while (!HasScaleformMovieLoaded(scaleformCamera)) await Delay(0);
+
+  scaleformButton = RequestScaleformMovie('instructional_buttons');
+  while (!HasScaleformMovieLoaded(scaleformButton)) await Delay(0);
+
   SetNuiFocus(true, true);
   sendMessage('PHONE', PhoneEvents.SET_VISIBILITY, true);
 }
@@ -55,20 +118,70 @@ RegisterNuiCB<void>(PhotoEvents.TAKE_PHOTO, async (_, cb) => {
 
   while (inCameraMode) {
     await Delay(0);
+
     // Arrow Up Key, Toggle Front/Back Camera
     if (IsControlJustPressed(1, 27)) {
+      PlaySoundFrontend(-1, 'Menu_Navigate', 'Phone_SoundSet_Prologue', true);
       frontCam = !frontCam;
       CellFrontCamActivate(frontCam);
-      // Enter Key, Take Photo
+    } else if (IsControlJustPressed(1, 185)) {
+      // Depth of field
+      PlaySoundFrontend(-1, 'Menu_Navigate', 'Phone_SoundSet_Prologue', true);
+      depthField = !depthField;
+    } else if (IsControlJustPressed(1, 183)) {
+      // Grid lines
+      PlaySoundFrontend(-1, 'Menu_Navigate', 'Phone_SoundSet_Prologue', true);
+      drawGridLines = !drawGridLines;
+    } else if (IsControlJustPressed(1, 173)) {
+      // Filters
+      PlaySoundFrontend(-1, 'Menu_Navigate', 'Phone_SoundSet_Prologue', true);
+      filterIndex += 1;
+      if (filterIndex == 13) {
+        filterIndex = 0;
+      }
+
+      SetTimecycleModifier(filterNames[filterIndex]);
     } else if (IsControlJustPressed(1, 176)) {
+      // Take photo
+      PlaySoundFrontend(-1, 'Camera_Shoot', 'Phone_SoundSet_Prologue', true);
       const resp = await handleTakePicture();
       cb(resp);
       break;
-    } else if (IsControlJustPressed(1, 194)) {
+    } else if (IsControlJustPressed(1, 177)) {
+      // Exit phone
       await handleCameraExit();
       break;
     }
-    displayHelperText();
+
+    // displayHelperText();
+
+    SetScriptGfxDrawOrder(4);
+
+    BeginScaleformMovieMethod(scaleformCamera, 'SHOW_PHOTO_FRAME');
+    ScaleformMovieMethodAddParamInt(drawGridLines ? 1 : 0);
+    EndScaleformMovieMethod();
+
+    Citizen.invokeNative('0xA2CCBE62CD4C91A4', SetMobilePhoneUnk(depthField) as unknown);
+
+    BeginScaleformMovieMethod(scaleformCamera, 'DISPLAY_VIEW');
+    ScaleformMovieMethodAddParamInt(2);
+    EndScaleformMovieMethod();
+
+    DrawScaleformMovie(scaleformCamera, 0.5, 0.5, 1.0, 1.0, 255, 255, 255, 255, 0);
+
+    DrawCameraInstructionalButtons(frontCam);
+
+    HideHudComponentThisFrame(6);
+    HideHudComponentThisFrame(7);
+    HideHudComponentThisFrame(8);
+    HideHudComponentThisFrame(9);
+    HideHudComponentThisFrame(19);
+  }
+
+  if (filterIndex != 0) {
+    SetTimecycleModifier('');
+    ClearTimecycleModifier();
+    filterIndex = 0;
   }
 
   ClearHelp(true);
