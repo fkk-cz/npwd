@@ -64,16 +64,16 @@ export const APPS: IAppConfig[] = [
     path: '/phone',
     Route: () => <AppRoute id="DIALER" path="/phone" component={DialerApp} emitOnOpen={false} />,
   },
-  {
-    id: 'BROWSER',
-    nameLocale: 'BROWSER.NAME',
-    backgroundColor: blue['300'],
-    path: '/browser',
-    color: common.white,
-    Route: () => (
-      <AppRoute id="BROWSER" path="/browser" component={BrowserApp} emitOnOpen={false} />
-    ),
-  },
+  //{
+  //    id: 'BROWSER',
+  //    nameLocale: 'BROWSER.NAME',
+  //    backgroundColor: blue['300'],
+  //    path: '/browser',
+  //    color: common.white,
+  //    Route: () => (
+  //        <AppRoute id="BROWSER" path="/browser" component={BrowserApp} emitOnOpen={false} />
+  //    ),
+  //},
   {
     id: 'MESSAGES',
     nameLocale: 'APPS_MESSAGES',
@@ -116,13 +116,13 @@ export const APPS: IAppConfig[] = [
   },
   /* Hiding the bank app while the bank resource gets done */
   /*{
-    id: 'BANK',
-    nameLocale: 'APPS_BANK',
-    backgroundColor: blue[900],
-    color: common.white,
-    path: '/bank',
-    Route: () => <AppRoute id="BANK" path="/bank" component={BankApp} />,
-  },*/
+      id: 'BANK',
+      nameLocale: 'APPS_BANK',
+      backgroundColor: blue[900],
+      color: common.white,
+      path: '/bank',
+      Route: () => <AppRoute id="BANK" path="/bank" component={BankApp} />,
+    },*/
   {
     id: 'MATCH',
     nameLocale: 'APPS_MATCH',
