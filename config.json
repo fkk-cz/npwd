@@ -5,7 +5,7 @@
     "exportFunction": "myCheckerFunction"
   },
   "general": {
-    "useResourceIntegration": false,
+    "useResourceIntegration": true,
     "toggleKey": "f1",
     "toggleCommand": "phone"
   },
@@ -13,7 +13,7 @@
     "useIdentifierPrefix": false,
     "playerTable": "users",
     "identifierColumn": "identifier",
-    "identifierType": "license",
+    "identifierType": "steam",
     "profileQueries": true,
     "phoneNumberColumn": "phone_number"
   },
@@ -44,7 +44,7 @@
     "showNotifications": true,
     "generateProfileNameFromUsers": true,
     "allowEditableProfileName": true,
-    "allowDeleteTweets": true,
+    "allowDeleteTweets": false,
     "allowReportTweets": true,
     "characterLimit": 160,
     "newLineLimit": 10,
@@ -60,6 +60,6 @@
   "debug": {
     "level": "error",
     "enabled": true,
-    "sentryEnabled": true
+    "sentryEnabled": false
   }
 }
