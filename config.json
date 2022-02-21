@@ -59,7 +59,7 @@
   },
   "debug": {
     "level": "error",
-    "enabled": true,
+    "enabled": false,
     "sentryEnabled": false
   }
 }
