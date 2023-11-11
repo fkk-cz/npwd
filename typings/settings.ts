@@ -16,10 +16,6 @@ export enum KvpItems {
   NPWD_FRAME = 'npwd-frame',
 }
 
-export type IPhoneLocalStorage = {
-  [key: string]: IPhoneSettings;
-};
-
 export interface IPhoneSettings {
   language: SettingOption;
   iconSet: SettingOption<IconSetObject>;
@@ -28,7 +24,6 @@ export interface IPhoneSettings {
   theme: SettingOption;
   zoom: SettingOption;
   streamerMode: boolean;
-  anonymousMode: boolean;
   ringtone: SettingOption;
   callVolume: number;
   notiSound: SettingOption;

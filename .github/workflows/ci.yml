@@ -8,20 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/phone
+        working-directory: phone
  
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
         with:
-          version: latest
-
+          node-version: '16.x'
+          cache: 'yarn'
       - name: Install dependencies NUI
-        run: pnpm i --frozen-lockfile
+        run: yarn --frozen-lockfile
+      - name: Run Enzyme Tests
+        run: yarn test
       - name: Check build status
-        run: pnpm build
+        run: yarn build
         env:
           CI: true
 
@@ -30,21 +32,22 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/game
+        working-directory: resources
     
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
         with:
-          version: latest
-
+          node-version: '16.x'
+          cache: 'yarn'
       - name: Install dependencies NUI
-        run: pnpm i --frozen-lockfile
+        run: yarn --frozen-lockfile
+      - name: Run Jest Tests
+        run: yarn test
       - name: Check build status
-        run: pnpm build 
+        run: yarn build
         env:
           CI: true
 
@@ -54,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/game 
+        working-directory: resources
         
     steps:
       - name: Checkout

@@ -16,11 +16,6 @@ export interface Contact extends PreDBContact {
   id: number;
 }
 
-export interface ContactPay {
-  number: string;
-  amount: number;
-}
-
 export interface ContactDeleteDTO {
   id: number;
 }
@@ -38,9 +33,8 @@ export enum ContactsDatabaseLimits {
 }
 
 export enum ContactEvents {
-  PAY_CONTACT = 'npwd-contact-pay',
-  GET_CONTACTS = 'npwd-contact-getAll',
-  ADD_CONTACT = 'npwd-contact-add',
+  GET_CONTACTS = 'npwd:getContacts',
+  ADD_CONTACT = 'npwd:addContacts',
   UPDATE_CONTACT = 'npwd:updateContact',
   DELETE_CONTACT = 'npwd:deleteContact',
   // Used to fill in information through an export event
