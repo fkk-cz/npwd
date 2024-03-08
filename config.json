@@ -1,8 +1,8 @@
 {
   "PhoneAsItem": {
-    "enabled": false,
-    "exportResource": "my-core-resource",
-    "exportFunction": "myCheckerFunction"
+    "enabled": true,
+    "exportResource": "noire_assets",
+    "exportFunction": "hasPhone"
   },
   "customPhoneNumber": {
     "enabled": false,
@@ -10,12 +10,12 @@
     "exportFunction": "generateNumber"
   },
   "general": {
-    "useResourceIntegration": false,
+    "useResourceIntegration": true,
     "toggleKey": "f1",
     "toggleCommand": "phone",
     "defaultLanguage": "en",
     "showId": false,
-    "phoneNumberFormat": "/(\\d{3})(\\d{3})(\\d{4})/"
+    "phoneNumberFormat": "/(\\d{3})-(\\d{4})/"
   },
   "contacts": {
     "frameworkPay": false,
@@ -26,20 +26,12 @@
     "useIdentifierPrefix": false,
     "playerTable": "users",
     "identifierColumn": "identifier",
-    "identifierType": "license",
+    "identifierType": "steam",
     "profileQueries": true,
     "phoneNumberColumn": "phone_number"
   },
   "images": {
-    "url": "https://api.fivemanage.com/api/image",
-    "type": "image",
-    "imageEncoding": "webp",
-    "contentType": "multipart/form-data",
-    "useContentType": false,
-    "authorizationHeader": "Authorization",
-    "authorizationPrefix": "",
-    "useAuthorization": true,
-    "returnedDataIndexes": ["url"]
+    "useWebhook": true
   },
   "imageSafety": {
     "filterUnsafeImageUrls": true,
@@ -72,8 +64,8 @@
     "allowEditableProfileName": true,
     "allowDeleteTweets": true,
     "allowReportTweets": true,
-    "allowRetweet": true,
-    "characterLimit": 160,
+    "allowRetweet": false,
+    "characterLimit": 140,
     "newLineLimit": 10,
     "enableAvatars": true,
     "enableEmojis": true,
@@ -89,16 +81,16 @@
     "persistListings": false
   },
   "browser": {
-    "homepageUrl": "https://docs.fivemanage.com"
+    "homepageUrl": "https://noire.cloud"
   },
   "debug": {
     "level": "error",
     "enabled": true,
-    "sentryEnabled": true
+    "sentryEnabled": false
   },
   "defaultContacts": [],
-  "disabledApps": [],
-  "apps": [],
+  "disabledApps": ["DARKCHAT", "IRC"],
+  "apps": ["npwd_jobs"],
   "voiceMessage": {
     "enabled": false,
     "authorizationHeader": "Authorization",

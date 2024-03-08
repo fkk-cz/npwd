@@ -289,5 +289,5 @@
     "logLevel": 1,
     "shouldShowAtomDebug": false
   },
-  "SentryErrorMetrics": true
+  "SentryErrorMetrics": false
 }
